@@ -1,0 +1,12 @@
+#ignore build/
+build/
+vendored/
+*.xcf
+*.o
+*.obj
+*.exe
+*.out
+*.log
+*.ilk
+*.pdb
+*.idb
