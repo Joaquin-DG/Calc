@@ -24,7 +24,7 @@ void Cal::SetDraw(){
     
     float x , y , h = 100, w  = 150;
     SDL_FRect aux = {0 , 0 , w , h};
-    for(int i = 0; i<10 ; ++i){
+    for(int i = 0; i<19 ; ++i){
         switch (i)
         {
         case 0:
@@ -69,7 +69,52 @@ void Cal::SetDraw(){
             aux.x = 300;
             aux.y = 400;
             break;
-                
+        case CE: //CE button
+            aux.x = 0;
+            aux.y = 300;
+            break;
+            
+        case OFF: 
+            aux.x = 150;
+            aux.y = 300;
+            break; 
+            
+        case SQRT: 
+            aux.x = 300;
+            aux.y = 300;
+            break;
+            
+        case DIVISION: 
+            aux.x = 450;
+            aux.y = 300;
+            break;
+            
+        case MULT: 
+            aux.x = 450;
+            aux.y = 400;
+            break;
+            
+        case MINUS: 
+            aux.x = 450;
+            aux.y = 500;
+            break;
+            
+        case ADD: 
+            aux.x = 450;
+            aux.y = 600;
+            aux.h = h * 2 ;
+            break;
+            
+        case EQUAL: 
+            aux.x = 300;
+            aux.y = 700;
+            break;
+            
+        case DECIMAL_COMMA: 
+            aux.x = 150;
+            aux.y = 700;
+            break;                      
+        
         default:
             break;
         }    
@@ -79,8 +124,21 @@ void Cal::SetDraw(){
 
 void Cal::Draw(){
  //Por ahora dibujar solo los numeros del 0 al 9 del map num_buttons , renderizar los rectangulos
-    SDL_SetRenderDrawColor(this->renderer, 255,0,0,255); //Rojo
-    for(auto const&[key, val] : this->num_buttons){ //porque const& : 
+    SDL_SetRenderDrawColor(this->renderer, 255,0,0,255); 
+    for(auto const&[key, val] : this->num_buttons){
+        if(key >= 10){
+            SDL_SetRenderDrawColor(this->renderer,0,255,0,255);
+        }
         SDL_RenderFillRect(this->renderer, &val);    
     }
+}
+
+int Cal::OnClick(float x, float y){
+        for(auto const& [key, val] : this->num_buttons){
+            if( x >= val.x && x <= (val.x + val.w) && y >= val.y && y <= (val.y + val.h)){
+                SDL_Log("Click en el boton %d", key);
+                return key;
+            }
+        }
+        return -1;
 }
