@@ -1,6 +1,7 @@
 #ignore build/
 build/
 vendored/
+.vscode/
 *.xcf
 *.o
 *.obj

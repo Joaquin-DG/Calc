@@ -24,7 +24,14 @@ void Cal::SetDraw(){
     
     float x , y , h = 100, w  = 150;
     SDL_FRect aux = {0 , 0 , w , h};
-    for(int i = 0; i<19 ; ++i){
+
+    /*this->ttf = {
+        "0","1","2","3","4","5","6","7","8","9",
+        "CE","OFF","√","/","*","-","+","=","."
+    };
+    */
+
+for(int i = 0; i<19 ; ++i){
         switch (i)
         {
         case 0:
@@ -123,22 +130,91 @@ void Cal::SetDraw(){
 }
 
 void Cal::Draw(){
- //Por ahora dibujar solo los numeros del 0 al 9 del map num_buttons , renderizar los rectangulos
-    SDL_SetRenderDrawColor(this->renderer, 255,0,0,255); 
+
+    SDL_SetRenderDrawColor(this->renderer, 255,255,255,255); 
     for(auto const&[key, val] : this->num_buttons){
-        if(key >= 10){
-            SDL_SetRenderDrawColor(this->renderer,0,255,0,255);
-        }
         SDL_RenderFillRect(this->renderer, &val);    
+    }
+    SDL_SetRenderDrawColor(this->renderer, 255,0,0,255);
+    for(auto const&[key, val] : this->num_buttons){
+        SDL_RenderRect(this->renderer,&val);
     }
 }
 
 int Cal::OnClick(float x, float y){
         for(auto const& [key, val] : this->num_buttons){
             if( x >= val.x && x <= (val.x + val.w) && y >= val.y && y <= (val.y + val.h)){
-                SDL_Log("Click en el boton %d", key);
                 return key;
             }
         }
         return -1;
+}
+
+
+void Cal::DoButton(int n){
+    switch (n)
+        {
+        case 0:
+            SDL_Log("This is action of number 0");
+            
+            break;
+        case 1: 
+            SDL_Log("This is action of number 1");
+            break;
+        case 2: 
+            SDL_Log("This is action of number 2");
+            break;
+        case 3: 
+            SDL_Log("This is action of number 3");
+            break;
+        case 4: 
+            SDL_Log("This is action of number 4");
+            break;
+        case 5: 
+            SDL_Log("This is action of number 5");
+            break;
+        case 6: 
+            SDL_Log("This is action of number 6");
+            break;
+        case 7: 
+            SDL_Log("This is action of number 7");
+            break;     
+        case 8: 
+            SDL_Log("This is action of number 8");
+            break;    
+        case 9: 
+            SDL_Log("This is action of number 9");
+            break;
+        case CE: //CE button
+            SDL_Log("This is action of CE");
+            break;
+        case OFF: 
+            SDL_Log("This is action of OFF");
+            break; 
+        case SQRT: 
+            SDL_Log("This is action of the square root");
+            break;
+        case DIVISION: 
+            SDL_Log("This is action of division");
+            break;
+        case MULT: 
+            SDL_Log("This is action of multiplication");
+            break;
+        case MINUS: 
+            SDL_Log("This is action of substract");
+            break;
+        case ADD: 
+            SDL_Log("This is action of addition");
+            break;
+        case EQUAL: 
+            SDL_Log("This is action of equal");
+            break;
+        case DECIMAL_COMMA: 
+            SDL_Log("This is action of decimal comma");
+            break;                      
+        default:
+            break;
+        }    
+
+
 }
