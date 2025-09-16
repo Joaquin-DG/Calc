@@ -8,6 +8,10 @@
 #include <SDL3_ttf/SDL_textengine.h>
 #include <array>
 #include <map>
+#include <string>
+#include <sstream>
+#include <cmath>
+
 
 #define CE 10
 #define OFF 11
@@ -21,11 +25,9 @@
 
 class Cal{ 
     private:
-    //double value reffering to the number shown in the display
-    double display_value;
-    //std::string showing the number in the display
-    std::string display_string;
-
+    
+    
+    
     public:
     // Constructor
     Cal(SDL_Window *win, SDL_Renderer *ren){
@@ -33,18 +35,32 @@ class Cal{
         this->renderer = ren;
     };
     ~Cal(){};
-
+    
     // Attributes
     SDL_Window *window;
     SDL_Renderer *renderer;
     std::map<int,SDL_FRect> num_buttons;
     SDL_FRect number_display{50,100,500,100};
 
+        //double value reffering to the number shown in the display
+        double final_value , value, value_aux;
+        //std::string showing the number in the display
+        std::string display_string;
+        std::string num_string = ""; //string to build the number when pressing buttons
+        //Stringstream to convert from string to double
+        std::stringstream ss;
+        std::map<char, double(*)(double, double)> operations;
+        //Previous operation (+,-,*,/)
+        char previous_op;
+        bool isalpha = false;
+
     //Functions
-    void SetDraw();
+    void SetAll();
     void Draw();
-    int OnClick(float x, float y);
-    void DoButton(int n);
+    int OnClick(float& x, float& y);
+    void DoButton(int& n);
+    void Calculate();
+    bool LastnotOperator();
 };
 
 

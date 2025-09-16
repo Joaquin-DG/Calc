@@ -1,6 +1,35 @@
 #include "myLib.h"
 
 
+/*
+    Funciones de operaciones de la calculadora
+    ADD
+    SUBSTRACTION
+    MULTIPLICATION
+    DIVISION
+    SQRT
+
+*/
+
+double Add(double x, double y){
+    return x+y;
+}
+
+double Substract(double x, double y){
+    return x-y;
+}
+
+double Mult(double x, double y){
+    return x*y;
+}
+double Div(double x, double y){
+    return x/y;
+}
+double Sqrt(double x, double y){
+    return sqrt(x);
+}
+
+
 
 /*
     Funcion para hacer el set de los botones de la calculadora 
@@ -19,19 +48,13 @@
         }
 
 */
-void Cal::SetDraw(){
+void Cal::SetAll(){
     //10 botones numerico que empiezan en la mitad de abajo
     
     float x , y , h = 100, w  = 150;
     SDL_FRect aux = {0 , 0 , w , h};
 
-    /*this->ttf = {
-        "0","1","2","3","4","5","6","7","8","9",
-        "CE","OFF","√","/","*","-","+","=","."
-    };
-    */
-
-for(int i = 0; i<19 ; ++i){
+    for(int i = 0; i<19 ; ++i){
         switch (i)
         {
         case 0:
@@ -127,6 +150,15 @@ for(int i = 0; i<19 ; ++i){
         }    
         this->num_buttons[i] = aux; 
     }
+
+    //Create the map of functions to make operations
+    this->operations = {
+        {'+', Add},
+        {'-', Substract},
+        {'*', Mult},
+        {'/', Div},
+        {'√', Sqrt}
+    };
 }
 
 void Cal::Draw(){
@@ -141,7 +173,7 @@ void Cal::Draw(){
     }
 }
 
-int Cal::OnClick(float x, float y){
+int Cal::OnClick(float &x, float &y){
         for(auto const& [key, val] : this->num_buttons){
             if( x >= val.x && x <= (val.x + val.w) && y >= val.y && y <= (val.y + val.h)){
                 return key;
@@ -150,71 +182,138 @@ int Cal::OnClick(float x, float y){
         return -1;
 }
 
+bool Cal::LastnotOperator(){
+    if(!num_string.empty() && num_string.back() >= '0' && num_string.back() <= '9'){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
-void Cal::DoButton(int n){
+
+void Cal::DoButton(int& n){
     switch (n)
         {
         case 0:
-            SDL_Log("This is action of number 0");
-            
+            num_string.append("0");
             break;
         case 1: 
-            SDL_Log("This is action of number 1");
+            num_string.append("1");
             break;
         case 2: 
-            SDL_Log("This is action of number 2");
+            num_string.append("2");
             break;
         case 3: 
-            SDL_Log("This is action of number 3");
+            num_string.append("3");
             break;
         case 4: 
-            SDL_Log("This is action of number 4");
+            num_string.append("4");
             break;
         case 5: 
-            SDL_Log("This is action of number 5");
+            num_string.append("5");
             break;
         case 6: 
-            SDL_Log("This is action of number 6");
+            num_string.append("6");
             break;
         case 7: 
-            SDL_Log("This is action of number 7");
+            num_string.append("7");
             break;     
         case 8: 
-            SDL_Log("This is action of number 8");
+            num_string.append("8");
             break;    
         case 9: 
-            SDL_Log("This is action of number 9");
+            num_string.append("9");
             break;
         case CE: //CE button
-            SDL_Log("This is action of CE");
+            num_string.clear();
+            display_string.clear();
             break;
         case OFF: 
-            SDL_Log("This is action of OFF");
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Off button pressed, exiting...");
+            exit(0);
             break; 
+
+
+            //Now we should check if the last char is not an operator in the string
         case SQRT: 
-            SDL_Log("This is action of the square root");
+                num_string.append("√");    
             break;
-        case DIVISION: 
-            SDL_Log("This is action of division");
+        case DIVISION:
+            if(LastnotOperator()){ //if true i can place next a operator
+                num_string.append("/");    
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place division here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();                
+            }
             break;
         case MULT: 
-            SDL_Log("This is action of multiplication");
+            if(LastnotOperator()){ //if true i can place next a operator
+                num_string.append("*");
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place multiplication here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();                
+            }
             break;
         case MINUS: 
-            SDL_Log("This is action of substract");
+            if(this->num_string.size() == 0){ //This makes sure that the negative char '-' is appended if it's the first element, after that a negatvie number is just substracting
+                num_string.append("-");
+                break;
+            }
+            if(LastnotOperator()){ 
+                num_string.append("-");
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place subtraction here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();                
+            }
             break;
         case ADD: 
-            SDL_Log("This is action of addition");
+            if(LastnotOperator()){ //if true i can place next a operator
+                num_string.append("+");
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place addition here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();                
+            }
             break;
-        case EQUAL: 
-            SDL_Log("This is action of equal");
+        case EQUAL:
+            if(!LastnotOperator()){
+                SDL_Log("Last element must be a number");
+                num_string.clear();
+                break;
+            }
+            SDL_Log("Equal");
+            //Here we should evaluate the expression in num_string    
+            this->Calculate();
+
+
+
             break;
-        case DECIMAL_COMMA: 
-            SDL_Log("This is action of decimal comma");
+        case DECIMAL_COMMA: //Current bug: You can place 215.21.21.2 for example and doesnt throw error because it evaluates only the last element of the string. Prob won't fix it
+            if(LastnotOperator()){ //if true i can place next a operator
+                num_string.append(".");
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place decimal point here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();
+            }
             break;                      
         default:
             break;
         }    
 
+    }
 
+//Function to calculate the whole thing, might dont work 
+void Cal::Calculate() {
+    this->ss.clear();
+    this->ss.str(num_string);
+
+
+    // Clear the stringstream for future use
+    this->ss.clear();
+    this->ss.str("");
 }
