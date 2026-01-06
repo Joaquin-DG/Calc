@@ -29,8 +29,6 @@ double Sqrt(double x, double y){
     return sqrt(x);
 }
 
-
-
 /*
     Funcion para hacer el set de los botones de la calculadora 
     El rectangulo del resultado no se tiene en cuenta aquí ya que no se va a usar, solo es output
@@ -225,7 +223,7 @@ void Cal::DoButton(int& n){
         case 9: 
             num_string.append("9");
             break;
-        case CE: //CE button
+        case CE: //CE button 
             num_string.clear();
             display_string.clear();
             break;
@@ -234,10 +232,17 @@ void Cal::DoButton(int& n){
             exit(0);
             break; 
 
-
             //Now we should check if the last char is not an operator in the string
         case SQRT: 
-                num_string.append("√");    
+            if((num_string.empty() || num_string.back() == '+' || num_string.back() == '-' || 
+                num_string.back() == '*' || num_string.back() == '/') ){
+                num_string.append("√"); //If the last char is an operator, we can append the sqrt operator
+            }else{ 
+                SDL_Log("Syntax Error: Cannot place square root here, rewrite the expression.");
+                num_string.clear();
+                display_string.clear();     
+            }
+
             break;
         case DIVISION:
             if(LastnotOperator()){ //if true i can place next a operator
@@ -286,11 +291,6 @@ void Cal::DoButton(int& n){
                 break;
             }
             SDL_Log("Equal");
-            //Here we should evaluate the expression in num_string    
-            this->Calculate();
-
-
-
             break;
         case DECIMAL_COMMA: //Current bug: You can place 215.21.21.2 for example and doesnt throw error because it evaluates only the last element of the string. Prob won't fix it
             if(LastnotOperator()){ //if true i can place next a operator
@@ -306,14 +306,3 @@ void Cal::DoButton(int& n){
         }    
 
     }
-
-//Function to calculate the whole thing, might dont work 
-void Cal::Calculate() {
-    this->ss.clear();
-    this->ss.str(num_string);
-
-
-    // Clear the stringstream for future use
-    this->ss.clear();
-    this->ss.str("");
-}

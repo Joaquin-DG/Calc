@@ -59,7 +59,6 @@ class Cal{
     void Draw();
     int OnClick(float& x, float& y);
     void DoButton(int& n);
-    void Calculate();
     bool LastnotOperator();
 };
 

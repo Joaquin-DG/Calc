@@ -1,10 +1,10 @@
-#ignore build/
-build/
 .idea/
-vendored/
 .vscode/
+*.log
+build/
+Esquema.drawio
+vendored/
+*.iml
 *.xcf
-*.o
-*.obj
-*.exe
-*.out
+
+

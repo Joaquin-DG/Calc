@@ -13,7 +13,7 @@ add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
 # Create your game executable target as usual
-add_executable(Calc src/main.cpp src/func.cpp src/myLib.h)
+add_executable(Calc src/main.cpp src/func.cpp src/Token.cpp src/myLib.h)
 
 # Link to the actual SDL3 library.
 target_link_libraries(Calc PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3)

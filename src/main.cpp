@@ -21,7 +21,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     // Set the locale to Spanish (Spain) with UTF-8 encoding support
     std::locale::global(std::locale("es_ES.utf8"));
     std::wcout.imbue(std::locale());
-
+    
     
     /* Create the window */
     if (!SDL_CreateWindowAndRenderer("Calc", 600, 800, 0, &Calc.window, &Calc.renderer)) {
@@ -78,4 +78,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 /* This function runs once at shutdown. */
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
+    SDL_DestroyWindow(Calc.window);
+    SDL_DestroyRenderer(Calc.renderer);
 }
