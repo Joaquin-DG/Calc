@@ -18,7 +18,6 @@ add_executable(Calc src/main.cpp src/func.cpp src/Token.cpp src/myLib.h)
 # Link to the actual SDL3 library.
 target_link_libraries(Calc PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3)
 
-# Copy assets folder to executable path
 add_custom_command(TARGET Calc POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Calc>/assets)

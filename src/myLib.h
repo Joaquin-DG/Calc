@@ -1,7 +1,6 @@
 #ifndef MY_LIB_H
 #define MY_LIB_H
 
-// Your function declarations go here
 #include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
